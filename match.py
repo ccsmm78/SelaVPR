@@ -94,21 +94,11 @@ class GeoLocalizationMatcher:
 
             # Display the image using imshow
             cv2.imshow('Patch Matches', im_allpatch_matches)
-            cv2.waitKey(0)  # Wait for a key press to close the image window
-            cv2.destroyAllWindows()
+            cv2.waitKey(1)  # Wait for a key press to close the image window
+            #cv2.destroyAllWindows()
 
-
-def main():
+def do_match(imgpath0, imgpath1, matcher):
     start_time = time.time()
-    
-    # Matcher 클래스 생성
-    matcher = GeoLocalizationMatcher()
-    print(f"Model loading time: {time.time() - start_time:.2f} seconds")
-
-    # 이미지 경로 설정
-    imgpath0 = "./image/img_pair/img0.jpg"
-    imgpath1 = "./image/img_pair/img1.jpg"
-
     # Patch feature 추출
     patch_time = time.time()
     patch_feature0 = matcher.get_patchfeature(imgpath0)
@@ -126,6 +116,21 @@ def main():
     # 전체 실행 시간 출력
     print(f"Total execution time: {time.time() - start_time:.2f} seconds")
 
+
+def main():
+    start_time = time.time()
+    
+    # Matcher 클래스 생성
+    matcher = GeoLocalizationMatcher(match_pattern="coarse")  #"dense", "coarse"
+    print(f"Model loading time: {time.time() - start_time:.2f} seconds")
+
+    for i in range(1, 3):
+        # 이미지 경로 설정
+        imgpath0 = f"./image/img_pair/img0.jpg"
+        imgpath1 = f"./image/img_pair/img{i}.jpg"
+        do_match(imgpath0, imgpath1, matcher)
+
+    cv2.destroyAllWindows()
 
 if __name__ == "__main__":
     main()
